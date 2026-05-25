@@ -65,12 +65,18 @@ export default function UIOverlay() {
   const selectedTool = useBaseStore((state) => state.selectedTool);
   const currentFloor = useBaseStore((state) => state.currentFloor);
   const isSelectMode = useBaseStore((state) => state.isSelectMode);
+  const isRaidSimulatorMode = useBaseStore(
+    (state) => state.isRaidSimulatorMode
+  );
   const canUndo = useBaseStore((state) => state.history.length > 0);
   const selectedCount = useBaseStore((state) => state.selectedIds.length);
 
   const setBase = useBaseStore((state) => state.setBase);
   const setSelectedTool = useBaseStore((state) => state.setSelectedTool);
   const toggleSelectMode = useBaseStore((state) => state.toggleSelectMode);
+  const toggleRaidSimulatorMode = useBaseStore(
+    (state) => state.toggleRaidSimulatorMode
+  );
   const nextFloor = useBaseStore((state) => state.nextFloor);
   const prevFloor = useBaseStore((state) => state.prevFloor);
   const undo = useBaseStore((state) => state.undo);
@@ -93,6 +99,7 @@ export default function UIOverlay() {
       if (event.key === "Escape") {
         setSelectedTool(null);
         if (isSelectMode) toggleSelectMode();
+        if (isRaidSimulatorMode) toggleRaidSimulatorMode();
         clearSelection();
         return;
       }
@@ -134,12 +141,14 @@ export default function UIOverlay() {
   }, [
     setSelectedTool,
     toggleSelectMode,
+    toggleRaidSimulatorMode,
     nextFloor,
     prevFloor,
     undo,
     clearSelection,
     deleteSelected,
     isSelectMode,
+    isRaidSimulatorMode,
     selectedCount,
   ]);
 
@@ -150,6 +159,7 @@ export default function UIOverlay() {
   const handleCancel = () => {
     setSelectedTool(null);
     if (isSelectMode) toggleSelectMode();
+    if (isRaidSimulatorMode) toggleRaidSimulatorMode();
   };
 
   const handleOpenExport = () => {
@@ -199,11 +209,13 @@ export default function UIOverlay() {
     "bg-zinc-900/80 hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-zinc-900/80",
   ].join(" ");
 
-  const modeLabel = isSelectMode
-    ? "select"
-    : selectedTool
-      ? TOOL_LABEL[selectedTool]
-      : "none";
+  const modeLabel = isRaidSimulatorMode
+    ? "raid"
+    : isSelectMode
+      ? "select"
+      : selectedTool
+        ? TOOL_LABEL[selectedTool]
+        : "none";
 
   const renderToolButton = (tool: Tool) => {
     const Icon = TOOL_ICON[tool];
@@ -238,7 +250,7 @@ export default function UIOverlay() {
           Select Mode (S)
         </button>
 
-        {(selectedTool || isSelectMode) && (
+        {(selectedTool || isSelectMode || isRaidSimulatorMode) && (
           <button type="button" onClick={handleCancel} className={cancelButtonClass}>
             <X className="h-4 w-4" />
             Cancel (ESC)

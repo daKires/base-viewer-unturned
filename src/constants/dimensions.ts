@@ -42,6 +42,9 @@ export const TRIANGLE_THICKNESS = 0.1;
 
 export const EDGE_SNAP_RADIUS = 1.5;
 
+// 1 wall = 4 grid units ≈ 3 game meters → factor to convert splashRadius (meters) to world units
+export const METERS_TO_WORLD = GRID_SIZE / 3;
+
 export interface GeometryPart {
   size: Vec3;
   position: Vec3;

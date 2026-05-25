@@ -50,6 +50,13 @@ function isValidStructureId(v: unknown): boolean {
   return v === undefined || typeof v === "string";
 }
 
+function isValidCurrentHp(v: unknown): boolean {
+  return (
+    v === undefined ||
+    (typeof v === "number" && Number.isFinite(v) && v >= 0)
+  );
+}
+
 function isValidBuildItem(raw: unknown): raw is BuildItem {
   if (typeof raw !== "object" || raw === null) return false;
   const item = raw as Record<string, unknown>;
@@ -63,7 +70,8 @@ function isValidBuildItem(raw: unknown): raw is BuildItem {
     isValidComment(item.comment) &&
     isValidAttachmentType(item.attachmentType) &&
     isValidAttachmentOpen(item.isAttachmentOpen) &&
-    isValidStructureId(item.structureId)
+    isValidStructureId(item.structureId) &&
+    isValidCurrentHp(item.currentHp)
   );
 }
 
@@ -76,7 +84,12 @@ export function exportBaseToFile(
     .trim();
   const safe = sanitized.length > 0 ? sanitized : DEFAULT_FILENAME;
 
-  const json = JSON.stringify(items, null, 2);
+  const cleaned = items.map((item) => {
+    const copy: BuildItem = { ...item };
+    delete copy.currentHp;
+    return copy;
+  });
+  const json = JSON.stringify(cleaned, null, 2);
   const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
 

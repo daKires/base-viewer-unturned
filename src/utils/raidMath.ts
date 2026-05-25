@@ -1,3 +1,4 @@
+import { METERS_TO_WORLD } from "@/constants/dimensions";
 import { STRUCTURES_BY_MAP } from "@/data/unturned-data";
 import type {
   AttachmentType,
@@ -61,6 +62,33 @@ export function calculateRaidCost(
 export interface BOMResult {
   materials: Record<Material, number>;
   unmappedCount: number;
+}
+
+export function splashRadiusInWorld(splashRadiusMeters: number): number {
+  return splashRadiusMeters * METERS_TO_WORLD;
+}
+
+export function calculateSplashDamage(
+  point: { x: number; y: number; z: number },
+  worldRadius: number,
+  items: BuildItem[]
+): string[] {
+  if (worldRadius <= 0) return [];
+  const hit: string[] = [];
+  for (const item of items) {
+    const dx = item.position[0] - point.x;
+    const dy = item.position[1] - point.y;
+    const dz = item.position[2] - point.z;
+    if (Math.hypot(dx, dy, dz) <= worldRadius) {
+      hit.push(item.id);
+    }
+  }
+  return hit;
+}
+
+export function getItemMaxHp(item: BuildItem, map: MapContext): number {
+  const structure = getStructureForItem(item, map);
+  return structure?.hp ?? 0;
 }
 
 export function calculateBOM(

@@ -9,8 +9,11 @@ import {
   TRIANGLE_APOTHEM,
   WALL_HEIGHT,
 } from "@/constants/dimensions";
+import { EXPLOSIVES_BY_MAP } from "@/data/unturned-data";
 import { useBaseStore } from "@/store/useBaseStore";
+import { calculateSplashDamage, splashRadiusInWorld } from "@/utils/raidMath";
 import type { BuildItem, DoorTool, ItemType, Tool, Vec3 } from "@/types";
+import ExplosionCursor from "./ExplosionCursor";
 import GhostMesh from "./GhostMesh";
 
 interface SnapTransform {
@@ -220,6 +223,14 @@ export default function BuilderInteraction() {
   const clearDrag = useBaseStore((state) => state.clearDrag);
   const setSelection = useBaseStore((state) => state.setSelection);
   const selectedVariantId = useBaseStore((state) => state.selectedVariantId);
+  const isRaidSimulatorMode = useBaseStore((state) => state.isRaidSimulatorMode);
+  const selectedExplosiveId = useBaseStore((state) => state.selectedExplosiveId);
+  const setSimulatorHoverPoint = useBaseStore(
+    (state) => state.setSimulatorHoverPoint
+  );
+  const applyDamage = useBaseStore((state) => state.applyDamage);
+  const triggerFlash = useBaseStore((state) => state.triggerFlash);
+  const currentMap = useBaseStore((state) => state.currentMap);
 
   const floorY = currentFloor * WALL_HEIGHT;
 
@@ -254,6 +265,13 @@ export default function BuilderInteraction() {
   };
 
   const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
+    if (isRaidSimulatorMode) {
+      if (!selectedExplosiveId) return;
+      event.stopPropagation();
+      setSimulatorHoverPoint([event.point.x, floorY, event.point.z]);
+      return;
+    }
+
     if (isSelectMode) {
       if (!dragStartPoint) return;
       event.stopPropagation();
@@ -285,6 +303,9 @@ export default function BuilderInteraction() {
   const handlePointerOut = () => {
     if (isSelectMode && dragStartPoint) {
       clearDrag();
+    }
+    if (isRaidSimulatorMode) {
+      setSimulatorHoverPoint(null);
     }
     lastTransformRef.current = null;
   };
@@ -324,6 +345,26 @@ export default function BuilderInteraction() {
 
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     if (event.delta > DRAG_THRESHOLD_PX) return;
+
+    if (isRaidSimulatorMode) {
+      if (!selectedExplosiveId) return;
+      const explosive = EXPLOSIVES_BY_MAP[currentMap].find(
+        (e) => e.id === selectedExplosiveId
+      );
+      if (!explosive) return;
+      event.stopPropagation();
+      const radius = splashRadiusInWorld(explosive.splashRadius);
+      const ids = calculateSplashDamage(
+        { x: event.point.x, y: floorY, z: event.point.z },
+        radius,
+        buildItems
+      );
+      if (ids.length > 0) {
+        applyDamage(ids, explosive.damage);
+        triggerFlash(ids);
+      }
+      return;
+    }
 
     if (isSelectMode) return;
 
@@ -367,6 +408,8 @@ export default function BuilderInteraction() {
       {showGhost && placementType && (
         <GhostMesh ref={ghostRef} type={placementType} />
       )}
+
+      <ExplosionCursor />
 
       {showSelectArea && dragStartPoint && dragCurrentPoint && (
         <SelectAreaIndicator
