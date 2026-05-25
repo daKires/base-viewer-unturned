@@ -88,3 +88,24 @@ The free Hobby tier covers this app without any setup:
 Every push to `main` triggers a production deploy. Every PR gets an automatic preview URL.
 
 Environment variables: none (everything is client-side).
+
+## Feature flags
+
+The Raid Simulator panel is hidden in **production** to keep the public site focused on the building experience. It stays enabled in **preview deploys** and **local development** so it can keep evolving.
+
+The toggle is driven by Vercel's auto-injected `NEXT_PUBLIC_VERCEL_ENV`:
+
+| Environment | `NEXT_PUBLIC_VERCEL_ENV` | Raid Simulator |
+|---|---|---|
+| Vercel Production (push to `main`) | `production` | hidden |
+| Vercel Preview (PR / non-main branch) | `preview` | visible |
+| Local `npm run dev` | (undefined) | visible |
+
+To get a preview URL with the feature on, push to any non-main branch:
+
+```bash
+git checkout -b dev
+git push -u origin dev
+```
+
+Vercel will deploy a preview with `NEXT_PUBLIC_VERCEL_ENV=preview` and the panel becomes visible there.

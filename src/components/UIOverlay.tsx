@@ -26,7 +26,7 @@ import ExportModal from "./ExportModal";
 import VariantSelector from "./VariantSelector";
 
 const TOOL_LABEL: Record<Tool, string> = {
-  floor: "Floor",
+  floor: "Floor/Roof",
   wall: "Wall",
   doorway: "Doorway",
   window: "Window",

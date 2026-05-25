@@ -4,8 +4,14 @@ import { useMemo } from "react";
 import { Bomb, Wrench } from "lucide-react";
 import { EXPLOSIVES_BY_MAP } from "@/data/unturned-data";
 import { useBaseStore } from "@/store/useBaseStore";
+import { isRaidSimulatorEnabled } from "@/utils/featureFlags";
 
 export default function RaidSimulatorPanel() {
+  if (!isRaidSimulatorEnabled()) return null;
+  return <RaidSimulatorPanelInner />;
+}
+
+function RaidSimulatorPanelInner() {
   const isRaidSimulatorMode = useBaseStore((s) => s.isRaidSimulatorMode);
   const toggleRaidSimulatorMode = useBaseStore(
     (s) => s.toggleRaidSimulatorMode
