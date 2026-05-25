@@ -43,7 +43,6 @@ export interface Explosive {
   name: string;
   damage: number;
   map: MapContext;
-  splashRadius: number;
 }
 
 export interface BuildItem {
@@ -56,7 +55,6 @@ export interface BuildItem {
   attachmentType?: AttachmentType | null;
   isAttachmentOpen?: boolean;
   structureId?: string;
-  currentHp?: number;
 }
 
 export interface AttachmentSnapshot {

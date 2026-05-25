@@ -149,21 +149,13 @@ export const VANILLA_EXPLOSIVES: Explosive[] = [
     name: "Demolition Charge (C4)",
     damage: 1000,
     map: "Vanilla",
-    splashRadius: 8,
   },
-  {
-    id: "vanilla-rocket",
-    name: "Rocket",
-    damage: 750,
-    map: "Vanilla",
-    splashRadius: 12,
-  },
+  { id: "vanilla-rocket", name: "Rocket", damage: 750, map: "Vanilla" },
   {
     id: "vanilla-dragonfang",
     name: "Dragonfang Box (HMG)",
     damage: 50,
     map: "Vanilla",
-    splashRadius: 0,
   },
 ];
 
@@ -323,34 +315,15 @@ export const ARID_STRUCTURES: Structure[] = [
 ];
 
 export const ARID_EXPLOSIVES: Explosive[] = [
-  {
-    id: "arid-homemade",
-    name: "Homemade Charge",
-    damage: 400,
-    map: "Arid",
-    splashRadius: 7,
-  },
+  { id: "arid-homemade", name: "Homemade Charge", damage: 400, map: "Arid" },
   {
     id: "arid-breaching",
     name: "Breaching Charge",
     damage: 1500,
     map: "Arid",
-    splashRadius: 13,
   },
-  {
-    id: "arid-rpg7",
-    name: "RPG-7 Rocket / PG-7VM",
-    damage: 1200,
-    map: "Arid",
-    splashRadius: 11,
-  },
-  {
-    id: "arid-cobalt",
-    name: "Cobalt Charge",
-    damage: 3000,
-    map: "Arid",
-    splashRadius: 18,
-  },
+  { id: "arid-rpg7", name: "RPG-7 Rocket / PG-7VM", damage: 1200, map: "Arid" },
+  { id: "arid-cobalt", name: "Cobalt Charge", damage: 3000, map: "Arid" },
 ];
 
 // ============================================================================

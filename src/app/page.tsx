@@ -1,7 +1,6 @@
 import FloatingBOMWindow from "@/components/FloatingBOMWindow";
 import FloatingRaidMathWindow from "@/components/FloatingRaidMathWindow";
 import MapSelector from "@/components/MapSelector";
-import RaidSimulatorPanel from "@/components/RaidSimulatorPanel";
 import Scene3DClient from "@/components/Scene3DClient";
 import SelectionPanel from "@/components/SelectionPanel";
 import UIOverlay from "@/components/UIOverlay";
@@ -19,7 +18,6 @@ export default function Page() {
 
       <div className="absolute right-4 top-4 z-10 flex flex-col gap-2">
         <MapSelector />
-        <RaidSimulatorPanel />
         <FloatingBOMWindow />
         <FloatingRaidMathWindow />
       </div>

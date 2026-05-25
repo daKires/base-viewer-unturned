@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { getItemMaxHp } from "@/utils/raidMath";
 import type {
   AttachmentSnapshot,
   AttachmentType,
@@ -55,10 +54,6 @@ interface BaseState {
   dragCurrentPoint: Vec3 | null;
   currentMap: MapContext;
   selectedVariantId: string | null;
-  isRaidSimulatorMode: boolean;
-  selectedExplosiveId: string | null;
-  simulatorHoverPoint: Vec3 | null;
-  flashingIds: string[];
 
   addItem: (item: Omit<BuildItem, "id">) => void;
   removeItem: (id: string) => void;
@@ -85,12 +80,6 @@ interface BaseState {
   toggleAttachmentOpen: (id: string) => void;
   setCurrentMap: (map: MapContext) => void;
   setSelectedVariantId: (id: string | null) => void;
-  toggleRaidSimulatorMode: () => void;
-  setSelectedExplosiveId: (id: string | null) => void;
-  setSimulatorHoverPoint: (point: Vec3 | null) => void;
-  applyDamage: (ids: string[], damage: number) => void;
-  repairAll: () => void;
-  triggerFlash: (ids: string[]) => void;
 }
 
 export const useBaseStore = create<BaseState>()(
@@ -107,10 +96,6 @@ export const useBaseStore = create<BaseState>()(
       dragCurrentPoint: null,
       currentMap: "Vanilla",
       selectedVariantId: null,
-      isRaidSimulatorMode: false,
-      selectedExplosiveId: null,
-      simulatorHoverPoint: null,
-      flashingIds: [],
 
       addItem: (item) =>
         set((state) => {
@@ -160,9 +145,6 @@ export const useBaseStore = create<BaseState>()(
           isSelectMode: tool !== null ? false : state.isSelectMode,
           selectedIds: tool !== null ? [] : state.selectedIds,
           selectedVariantId: null,
-          isRaidSimulatorMode: tool !== null ? false : state.isRaidSimulatorMode,
-          selectedExplosiveId: tool !== null ? null : state.selectedExplosiveId,
-          simulatorHoverPoint: tool !== null ? null : state.simulatorHoverPoint,
         })),
 
       toggleSelectMode: () =>
@@ -174,9 +156,6 @@ export const useBaseStore = create<BaseState>()(
             dragStartPoint: null,
             dragCurrentPoint: null,
             selectedVariantId: next ? null : state.selectedVariantId,
-            isRaidSimulatorMode: next ? false : state.isRaidSimulatorMode,
-            selectedExplosiveId: next ? null : state.selectedExplosiveId,
-            simulatorHoverPoint: next ? null : state.simulatorHoverPoint,
           };
         }),
 
@@ -427,72 +406,12 @@ export const useBaseStore = create<BaseState>()(
         set({ currentMap: map, selectedVariantId: null }),
 
       setSelectedVariantId: (id) => set({ selectedVariantId: id }),
-
-      toggleRaidSimulatorMode: () =>
-        set((state) => {
-          const next = !state.isRaidSimulatorMode;
-          return {
-            isRaidSimulatorMode: next,
-            selectedTool: next ? null : state.selectedTool,
-            isSelectMode: next ? false : state.isSelectMode,
-            selectedIds: next ? [] : state.selectedIds,
-            selectedExplosiveId: next ? state.selectedExplosiveId : null,
-            simulatorHoverPoint: null,
-            dragStartPoint: null,
-            dragCurrentPoint: null,
-            selectedVariantId: next ? null : state.selectedVariantId,
-          };
-        }),
-
-      setSelectedExplosiveId: (id) =>
-        set({ selectedExplosiveId: id, simulatorHoverPoint: null }),
-
-      setSimulatorHoverPoint: (point) => set({ simulatorHoverPoint: point }),
-
-      applyDamage: (ids, damage) =>
-        set((state) => {
-          if (ids.length === 0 || damage <= 0) return state;
-          const idSet = new Set(ids);
-          return {
-            buildItems: state.buildItems.map((item) => {
-              if (!idSet.has(item.id)) return item;
-              const max = getItemMaxHp(item, state.currentMap);
-              const current = item.currentHp ?? max;
-              const nextHp = Math.max(0, current - damage);
-              return { ...item, currentHp: nextHp };
-            }),
-          };
-        }),
-
-      repairAll: () =>
-        set((state) => ({
-          buildItems: state.buildItems.map((item) => {
-            if (item.currentHp === undefined) return item;
-            const copy: BuildItem = { ...item };
-            delete copy.currentHp;
-            return copy;
-          }),
-        })),
-
-      triggerFlash: (ids) => {
-        set({ flashingIds: ids });
-        setTimeout(() => {
-          set((state) => ({
-            flashingIds: state.flashingIds === ids ? [] : state.flashingIds,
-          }));
-        }, 250);
-      },
     }),
     {
       name: STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        buildItems: state.buildItems.map((item) => {
-          if (item.currentHp === undefined) return item;
-          const copy: BuildItem = { ...item };
-          delete copy.currentHp;
-          return copy;
-        }),
+        buildItems: state.buildItems,
         currentMap: state.currentMap,
         selectedVariantId: state.selectedVariantId,
       }),

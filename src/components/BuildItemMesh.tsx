@@ -3,9 +3,7 @@
 import { useState } from "react";
 import type { ThreeEvent } from "@react-three/fiber";
 import { DEFAULT_COLOR_BY_TYPE, WALL_HEIGHT } from "@/constants/dimensions";
-import { EXPLOSIVES_BY_MAP } from "@/data/unturned-data";
 import { useBaseStore } from "@/store/useBaseStore";
-import { splashRadiusInWorld } from "@/utils/raidMath";
 import type { AttachmentType, BuildItem, DoorTool, ItemType, Tool } from "@/types";
 import CommentLabel from "./CommentLabel";
 import { DoorAttachment, ItemGeometry, ItemOutline } from "./itemGeometries";
@@ -16,9 +14,6 @@ interface BuildItemMeshProps {
 
 const PREVIEW_COLOR = "#eab308";
 const HOVER_HIGHLIGHT_COLOR = "#fbbf24";
-const HIT_PREVIEW_COLOR = "#ef4444";
-const FLASH_COLOR = "#fbbf24";
-const DESTROYED_COLOR = "#3f1f1f";
 const DRAG_THRESHOLD_PX = 5;
 
 const DOOR_TOOLS: ReadonlyArray<DoorTool> = [
@@ -74,25 +69,6 @@ export default function BuildItemMesh({ item }: BuildItemMeshProps) {
       item.position[2] <= maxZ
     );
   });
-  const isHitByExplosion = useBaseStore((state) => {
-    if (!state.isRaidSimulatorMode) return false;
-    if (!state.simulatorHoverPoint || !state.selectedExplosiveId) return false;
-    const explosive = EXPLOSIVES_BY_MAP[state.currentMap].find(
-      (e) => e.id === state.selectedExplosiveId
-    );
-    if (!explosive || explosive.splashRadius <= 0) return false;
-    const radius = splashRadiusInWorld(explosive.splashRadius);
-    const [hx, hy, hz] = state.simulatorHoverPoint;
-    const dx = item.position[0] - hx;
-    const dy = item.position[1] - hy;
-    const dz = item.position[2] - hz;
-    return Math.hypot(dx, dy, dz) <= radius;
-  });
-  const isFlashing = useBaseStore((state) =>
-    state.flashingIds.includes(item.id)
-  );
-  const isDestroyed = item.currentHp !== undefined && item.currentHp <= 0;
-
   const toggleSelectItem = useBaseStore((state) => state.toggleSelectItem);
   const setAttachment = useBaseStore((state) => state.setAttachment);
   const toggleAttachmentOpen = useBaseStore(
@@ -142,17 +118,11 @@ export default function BuildItemMesh({ item }: BuildItemMeshProps) {
   };
 
   const baseColor = item.color ?? DEFAULT_COLOR_BY_TYPE[item.type];
-  const color = isFlashing
-    ? FLASH_COLOR
-    : isDestroyed
-      ? DESTROYED_COLOR
-      : isHitByExplosion
-        ? HIT_PREVIEW_COLOR
-        : willBeSelected
-          ? PREVIEW_COLOR
-          : isAttachmentTarget && isHovered
-            ? HOVER_HIGHLIGHT_COLOR
-            : baseColor;
+  const color = willBeSelected
+    ? PREVIEW_COLOR
+    : isAttachmentTarget && isHovered
+      ? HOVER_HIGHLIGHT_COLOR
+      : baseColor;
 
   const showAttachment =
     isAttachmentParent(item.type) &&
