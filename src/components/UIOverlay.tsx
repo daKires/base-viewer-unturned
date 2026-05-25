@@ -29,11 +29,11 @@ const TOOL_LABEL: Record<Tool, string> = {
   wall: "Wall",
   doorway: "Doorway",
   window: "Window",
-  triangle_floor: "Triângulo",
-  garage_frame: "Batente Garagem",
-  standard_door: "Porta Simples",
-  double_door: "Portas Francesas (Duplas)",
-  garage_door: "Portão de Garagem",
+  triangle_floor: "Triangle",
+  garage_frame: "Garage Frame",
+  standard_door: "Standard Door",
+  double_door: "Double Doors",
+  garage_door: "Garage Door",
 };
 
 const TOOL_ICON: Record<Tool, typeof Square> = {
@@ -199,10 +199,10 @@ export default function UIOverlay() {
   ].join(" ");
 
   const modeLabel = isSelectMode
-    ? "selecionar"
+    ? "select"
     : selectedTool
       ? TOOL_LABEL[selectedTool]
-      : "nenhum";
+      : "none";
 
   const renderToolButton = (tool: Tool) => {
     const Icon = TOOL_ICON[tool];
@@ -234,13 +234,13 @@ export default function UIOverlay() {
           className={selectButtonClass}
         >
           <MousePointer2 className="h-4 w-4" />
-          Modo Selecionar (S)
+          Select Mode (S)
         </button>
 
         {(selectedTool || isSelectMode) && (
           <button type="button" onClick={handleCancel} className={cancelButtonClass}>
             <X className="h-4 w-4" />
-            Cancelar (ESC)
+            Cancel (ESC)
           </button>
         )}
 
@@ -248,12 +248,12 @@ export default function UIOverlay() {
 
         <button type="button" onClick={nextFloor} className={utilityButtonClass}>
           <ChevronUp className="h-4 w-4" />
-          Subir Andar (PgUp)
+          Floor Up (PgUp)
         </button>
 
         <button type="button" onClick={prevFloor} className={utilityButtonClass}>
           <ChevronDown className="h-4 w-4" />
-          Descer Andar (PgDn)
+          Floor Down (PgDn)
         </button>
 
         <button
@@ -263,7 +263,7 @@ export default function UIOverlay() {
           className={undoButtonClass}
         >
           <Undo2 className="h-4 w-4" />
-          Desfazer (Ctrl+Z)
+          Undo (Ctrl+Z)
         </button>
 
         <div className="mt-2 h-px bg-zinc-700/60" />
@@ -274,7 +274,7 @@ export default function UIOverlay() {
           className={utilityButtonClass}
         >
           <Download className="h-4 w-4" />
-          Exportar Base
+          Export Base
         </button>
 
         <button
@@ -283,7 +283,7 @@ export default function UIOverlay() {
           className={utilityButtonClass}
         >
           <Upload className="h-4 w-4" />
-          Importar Base
+          Import Base
         </button>
 
         <input
@@ -296,14 +296,14 @@ export default function UIOverlay() {
 
         <div className="mt-2 flex flex-col gap-1 rounded-md bg-zinc-900/60 px-3 py-2 text-xs text-zinc-400 backdrop-blur">
           <span>
-            Andar:{" "}
+            Floor:{" "}
             <span className="font-medium text-zinc-200">{currentFloor}</span>
           </span>
           <span>
-            Modo: <span className="font-medium text-zinc-200">{modeLabel}</span>
+            Mode: <span className="font-medium text-zinc-200">{modeLabel}</span>
           </span>
           <span>
-            Peças na base:{" "}
+            Pieces in base:{" "}
             <span className="font-medium text-zinc-200">{buildItems.length}</span>
           </span>
         </div>

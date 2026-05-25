@@ -94,28 +94,28 @@ export function importBaseFromFile(
   reader.onload = (event) => {
     const text = event.target?.result;
     if (typeof text !== "string") {
-      console.error("Falha ao ler o arquivo: conteúdo inválido");
+      console.error("Failed to read file: invalid content");
       return;
     }
 
     try {
       const parsed: unknown = JSON.parse(text);
       if (!Array.isArray(parsed)) {
-        console.error("Arquivo inválido: esperado um array de itens");
+        console.error("Invalid file: expected an array of items");
         return;
       }
       if (!parsed.every(isValidBuildItem)) {
-        console.error("Arquivo inválido: um ou mais itens estão malformados");
+        console.error("Invalid file: one or more items are malformed");
         return;
       }
       onLoaded(parsed);
     } catch (err) {
-      console.error("Falha ao parsear JSON:", err);
+      console.error("Failed to parse JSON:", err);
     }
   };
 
   reader.onerror = () => {
-    console.error("Erro ao ler o arquivo");
+    console.error("Error reading file");
   };
 
   reader.readAsText(file);

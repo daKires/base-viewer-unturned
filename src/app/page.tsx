@@ -1,6 +1,7 @@
 import Scene3DClient from "@/components/Scene3DClient";
 import SelectionPanel from "@/components/SelectionPanel";
 import UIOverlay from "@/components/UIOverlay";
+import WelcomeModal from "@/components/WelcomeModal";
 
 export default function Page() {
   return (
@@ -10,6 +11,7 @@ export default function Page() {
       </div>
       <UIOverlay />
       <SelectionPanel />
+      <WelcomeModal />
     </main>
   );
 }

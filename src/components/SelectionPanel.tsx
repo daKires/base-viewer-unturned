@@ -21,11 +21,11 @@ interface PaletteColor {
 }
 
 const COLOR_PALETTE: PaletteColor[] = [
-  { name: "Vermelho", hex: "#ef4444" },
-  { name: "Verde", hex: "#22c55e" },
-  { name: "Azul", hex: "#3b82f6" },
-  { name: "Amarelo", hex: "#eab308" },
-  { name: "Madeira", hex: "#92400e" },
+  { name: "Red", hex: "#ef4444" },
+  { name: "Green", hex: "#22c55e" },
+  { name: "Blue", hex: "#3b82f6" },
+  { name: "Yellow", hex: "#eab308" },
+  { name: "Wood", hex: "#92400e" },
   { name: "Metal", hex: "#71717a" },
 ];
 
@@ -64,7 +64,7 @@ export default function SelectionPanel() {
 
   const count = selectedIds.length;
   const headerText =
-    count === 1 ? "1 item selecionado" : `${count} itens selecionados`;
+    count === 1 ? "1 item selected" : `${count} items selected`;
 
   const handleApplyColor = (hex: string) => {
     updateMetadataForSelected({ color: hex });
@@ -106,7 +106,7 @@ export default function SelectionPanel() {
           className="flex items-center gap-1 rounded px-2 py-1 text-xs text-zinc-400 hover:bg-zinc-800 hover:text-white"
         >
           <X className="h-3.5 w-3.5" />
-          Limpar Seleção
+          Clear Selection
         </button>
       </div>
 
@@ -129,7 +129,7 @@ export default function SelectionPanel() {
           onClick={handleClearColor}
           className="ml-1 rounded px-2 py-1 text-xs text-zinc-300 hover:bg-zinc-800 hover:text-white"
         >
-          Limpar cor
+          Clear color
         </button>
       </div>
 
@@ -139,7 +139,7 @@ export default function SelectionPanel() {
           value={comment}
           onChange={handleCommentChange}
           maxLength={COMMENT_MAX}
-          placeholder="Comentário (ex: cozinha, entrada principal)"
+          placeholder="Comment (e.g. kitchen, main entrance)"
           className="flex-1 rounded bg-zinc-800 px-3 py-2 text-sm text-white placeholder-zinc-500 outline-none ring-1 ring-zinc-700 focus:ring-emerald-500"
         />
         <button
@@ -148,17 +148,17 @@ export default function SelectionPanel() {
           className="flex items-center gap-1 rounded bg-emerald-600/90 px-3 py-2 text-sm text-white hover:bg-emerald-600"
         >
           <Check className="h-4 w-4" />
-          Aplicar
+          Apply
         </button>
       </div>
 
       <div className="flex flex-wrap items-center gap-2 border-t border-zinc-700/60 pt-3">
         <div className="flex items-center gap-1">
-          <span className="mr-1 text-xs text-zinc-400">Mover:</span>
+          <span className="mr-1 text-xs text-zinc-400">Move:</span>
           <button
             type="button"
             onClick={() => moveSelected(0, -MOVE_STEP)}
-            title="Z- (frente)"
+            title="Z- (forward)"
             className={iconButton}
           >
             <ArrowUp className="h-4 w-4" />
@@ -166,7 +166,7 @@ export default function SelectionPanel() {
           <button
             type="button"
             onClick={() => moveSelected(0, MOVE_STEP)}
-            title="Z+ (trás)"
+            title="Z+ (back)"
             className={iconButton}
           >
             <ArrowDown className="h-4 w-4" />
@@ -174,7 +174,7 @@ export default function SelectionPanel() {
           <button
             type="button"
             onClick={() => moveSelected(-MOVE_STEP, 0)}
-            title="X- (esquerda)"
+            title="X- (left)"
             className={iconButton}
           >
             <ArrowLeft className="h-4 w-4" />
@@ -182,7 +182,7 @@ export default function SelectionPanel() {
           <button
             type="button"
             onClick={() => moveSelected(MOVE_STEP, 0)}
-            title="X+ (direita)"
+            title="X+ (right)"
             className={iconButton}
           >
             <ArrowRight className="h-4 w-4" />
@@ -191,7 +191,7 @@ export default function SelectionPanel() {
 
         <button type="button" onClick={copySelected} className={actionButton}>
           <Copy className="h-3.5 w-3.5" />
-          Copiar
+          Copy
         </button>
         <button
           type="button"
@@ -200,7 +200,7 @@ export default function SelectionPanel() {
           className={actionButton}
         >
           <ClipboardPaste className="h-3.5 w-3.5" />
-          Colar ao lado
+          Paste beside
         </button>
 
         <button
@@ -209,7 +209,7 @@ export default function SelectionPanel() {
           className={`${deleteButton} ml-auto`}
         >
           <Trash2 className="h-3.5 w-3.5" />
-          Deletar (Del)
+          Delete (Del)
         </button>
       </div>
     </div>

@@ -48,7 +48,7 @@ export default function ExportModal({ isOpen, onClose, items }: ExportModalProps
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-white">Exportar Base</h2>
+          <h2 className="text-lg font-semibold text-white">Export Base</h2>
           <button
             type="button"
             onClick={onClose}
@@ -63,7 +63,7 @@ export default function ExportModal({ isOpen, onClose, items }: ExportModalProps
             htmlFor="export-filename"
             className="mb-1 block text-sm text-zinc-300"
           >
-            Nome do arquivo
+            File name
           </label>
           <div className="mb-4 flex items-center gap-2 rounded bg-zinc-800 px-3 py-2 ring-1 ring-zinc-700 focus-within:ring-emerald-500">
             <input
@@ -79,7 +79,7 @@ export default function ExportModal({ isOpen, onClose, items }: ExportModalProps
           </div>
 
           <p className="mb-4 text-xs text-zinc-500">
-            {items.length} {items.length === 1 ? "peça" : "peças"} serão exportadas.
+            {items.length} {items.length === 1 ? "piece" : "pieces"} will be exported.
           </p>
 
           <div className="flex justify-end gap-2">
@@ -88,14 +88,14 @@ export default function ExportModal({ isOpen, onClose, items }: ExportModalProps
               onClick={onClose}
               className="rounded bg-zinc-800 px-4 py-2 text-sm text-white hover:bg-zinc-700"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
               className="flex items-center gap-2 rounded bg-emerald-600/90 px-4 py-2 text-sm text-white hover:bg-emerald-600"
             >
               <Download className="h-4 w-4" />
-              Exportar
+              Export
             </button>
           </div>
         </form>
