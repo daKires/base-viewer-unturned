@@ -14,6 +14,37 @@ export type Tool = ItemType | DoorTool;
 
 export type Vec3 = [number, number, number];
 
+export type MapContext = "Vanilla" | "Arid";
+
+export type Material = string;
+
+export interface RecipeEntry {
+  material: Material;
+  quantity: number;
+}
+
+export interface Recipe {
+  materials: RecipeEntry[];
+}
+
+export type StructureCategory = ItemType | AttachmentType;
+
+export interface Structure {
+  id: string;
+  name: string;
+  hp: number;
+  map: MapContext;
+  category: StructureCategory;
+  recipe: Recipe;
+}
+
+export interface Explosive {
+  id: string;
+  name: string;
+  damage: number;
+  map: MapContext;
+}
+
 export interface BuildItem {
   id: string;
   type: ItemType;
@@ -23,6 +54,7 @@ export interface BuildItem {
   comment?: string;
   attachmentType?: AttachmentType | null;
   isAttachmentOpen?: boolean;
+  structureId?: string;
 }
 
 export interface AttachmentSnapshot {

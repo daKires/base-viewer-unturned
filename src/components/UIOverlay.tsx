@@ -23,6 +23,7 @@ import { useBaseStore } from "@/store/useBaseStore";
 import { importBaseFromFile } from "@/utils/storageUtils";
 import type { Tool } from "@/types";
 import ExportModal from "./ExportModal";
+import VariantSelector from "./VariantSelector";
 
 const TOOL_LABEL: Record<Tool, string> = {
   floor: "Floor",
@@ -243,6 +244,8 @@ export default function UIOverlay() {
             Cancel (ESC)
           </button>
         )}
+
+        <VariantSelector />
 
         <div className="mt-2 h-px bg-zinc-700/60" />
 

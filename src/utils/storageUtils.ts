@@ -46,6 +46,10 @@ function isValidAttachmentOpen(v: unknown): boolean {
   return v === undefined || typeof v === "boolean";
 }
 
+function isValidStructureId(v: unknown): boolean {
+  return v === undefined || typeof v === "string";
+}
+
 function isValidBuildItem(raw: unknown): raw is BuildItem {
   if (typeof raw !== "object" || raw === null) return false;
   const item = raw as Record<string, unknown>;
@@ -58,7 +62,8 @@ function isValidBuildItem(raw: unknown): raw is BuildItem {
     isValidColor(item.color) &&
     isValidComment(item.comment) &&
     isValidAttachmentType(item.attachmentType) &&
-    isValidAttachmentOpen(item.isAttachmentOpen)
+    isValidAttachmentOpen(item.isAttachmentOpen) &&
+    isValidStructureId(item.structureId)
   );
 }
 

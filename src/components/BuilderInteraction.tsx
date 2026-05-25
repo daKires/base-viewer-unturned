@@ -219,6 +219,7 @@ export default function BuilderInteraction() {
   const setDragCurrent = useBaseStore((state) => state.setDragCurrent);
   const clearDrag = useBaseStore((state) => state.clearDrag);
   const setSelection = useBaseStore((state) => state.setSelection);
+  const selectedVariantId = useBaseStore((state) => state.selectedVariantId);
 
   const floorY = currentFloor * WALL_HEIGHT;
 
@@ -340,6 +341,7 @@ export default function BuilderInteraction() {
       type: placementType,
       position: lastTransformRef.current.position,
       rotation: lastTransformRef.current.rotation,
+      structureId: selectedVariantId ?? undefined,
     });
   };
 
